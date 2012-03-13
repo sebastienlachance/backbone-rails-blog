@@ -1,25 +1,18 @@
-<h1>Listing posts</h1>
 
-<table>
-  <tr>
-    <th>Title</th>
-    <th>Body</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
+<script type="text/template" id="post_template">
+  <article>
+    <header>
+    <h1><a href="{{= permalink }}" class="permalink">{{= title}}</a></h1>
+    <time>{{= created_at}}</time>
+    </header>
+    <div class="content">
+      {{= body}}
+    </div>
+  </article>
 
-<% @posts.each do |post| %>
-  <tr>
-    <td><%= post.title %></td>
-    <td><%= post.body %></td>
-    <td><%= link_to 'Show', post %></td>
-    <td><%= link_to 'Edit', edit_post_path(post) %></td>
-    <td><%= link_to 'Destroy', post, confirm: 'Are you sure?', method: :delete %></td>
-  </tr>
-<% end %>
-</table>
+</script>
 
-<br />
 
-<%= link_to 'New Post', new_post_path %>
+<div id="blog">
+</div>
+
