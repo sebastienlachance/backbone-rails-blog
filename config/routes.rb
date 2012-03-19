@@ -1,5 +1,8 @@
 BackboneRailsBlog::Application.routes.draw do
-  match "/:permalink" => 'posts#index'
+
+  #resource :posts
+  match "/posts" => "posts#index"
+  match "/posts/:permalink" => 'posts#show'
 
   root :to => 'posts#index'
 

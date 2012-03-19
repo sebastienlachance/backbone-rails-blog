@@ -5,13 +5,17 @@ _.templateSettings = {
 };
 
 
-  var Post = Backbone.Model.extend({
-    defaults: {
-      'title' : '' ,
-      'body' : '' ,
-      'created_at': Date.now()
-    } 
-  });
+var Post = Backbone.Model.extend({
+  defaults: {
+    'title' : '' ,
+    'body' : '' ,
+    'created_at': Date.now(),
+    'permalink': ''
+  } ,
+  url: function() {
+     return "/posts/" + this.get('permalink');
+  }
+});
 
   var PostList = Backbone.Collection.extend({
     model: Post,
@@ -73,8 +77,13 @@ _.templateSettings = {
        var view = new BlogView();
     },
 
-    post: function(permalink) {
-       Posts.get(1);
+    post: function(permalink_received) {
+       var p = new Post();
+       p.set('permalink',permalink_received);
+       p.fetch({success: function(model, response) {
+         var view = new PostView({model: model});
+         $('#blog').html(view.render().el);
+       }});
     }
 
   });
@@ -84,8 +93,5 @@ $(function() {
   window.blog = new Blog();
 
   Backbone.history.start({pushState: true});
-
-  var post = new Post({ 'title': 'test', 'body' : 'body', 'permalink': 'test'}); 
-  Posts.add(post);
 
 });
