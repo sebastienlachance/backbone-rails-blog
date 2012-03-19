@@ -13,13 +13,13 @@ var Post = Backbone.Model.extend({
     'permalink': ''
   } ,
   url: function() {
-     return "/posts/" + this.get('permalink');
+     return "/api/posts/" + this.get('permalink');
   }
 });
 
   var PostList = Backbone.Collection.extend({
     model: Post,
-    url: '/posts'
+    url: '/api/posts'
   });
 
   var Posts = new PostList();
