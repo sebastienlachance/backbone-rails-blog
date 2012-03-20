@@ -4,6 +4,14 @@ _.templateSettings = {
     evaluate: /\{\{(.+?)\}\}/g
 };
 
+function formatDate(datetime) {
+    var dateObj = new Date(datetime);
+    var dateStr = (dateObj.getMonth()+1) + "/" + dateObj.getDate() + "/" + dateObj.getFullYear();
+    return dateStr; // will return mm/dd/yyyy
+}
+
+
+
 
 var Post = Backbone.Model.extend({
   defaults: {
@@ -17,12 +25,11 @@ var Post = Backbone.Model.extend({
   }
 });
 
-  var PostList = Backbone.Collection.extend({
-    model: Post,
-    url: '/api/posts'
-  });
+var PostList = Backbone.Collection.extend({
+  model: Post,
+  url: '/api/posts'
+});
 
-  var Posts = new PostList();
 
   var PostView = Backbone.View.extend({
     
@@ -44,6 +51,8 @@ var Post = Backbone.Model.extend({
     }
 
   });
+
+var Posts = new PostList();
 
   var BlogView = Backbone.View.extend({
   
@@ -87,6 +96,8 @@ var Post = Backbone.Model.extend({
     }
 
   });
+
+
 
 $(function() {
 

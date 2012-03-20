@@ -7,12 +7,25 @@
 </head>
 <body>
 
-  <header>
-    <h1><a href="/">A simple Backbone driven blog</a></h1>
-  </header>
+  <div class="container">
+
+    <div class="sixteen columns">
+      <header>
+      <h1><a href="/">A simple Backbone driven blog</a></h1>
+      </header>
+    </div>
+
+    <div class="twelve columns content">
+      <%= yield %>
+      <div class="twelve columns return">
+        <a href="/">Return to the list</a>
+      </div>
+    </div>
+    <div class="three columns sidebar">
+    </div>
+  </div>
 
 
-<%= yield %>
 
   <%= javascript_include_tag "application" %>
 </body>

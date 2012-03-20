@@ -1,9 +1,9 @@
 
 <script type="text/template" id="post_template">
-  <article>
+  <article class="post">
     <header>
-    <h1><a href="{{= permalink }}" class="permalink">{{= title}}</a></h1>
-    <time>{{= created_at}}</time>
+    <h2><a href="{{= permalink }}" class="permalink">{{= title}}</a></h2>
+    <time dateime="{{= created_at}}">{{= formatDate(created_at)}}</time>
     </header>
     <div class="content">
       {{= body}}
@@ -12,6 +12,7 @@
 </script>
 
 
-<div id="blog">
+<div id="blog" class="twelve columns offset-by-one-content">
+
 </div>
 
