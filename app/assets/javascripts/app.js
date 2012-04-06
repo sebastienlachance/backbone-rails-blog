@@ -10,7 +10,16 @@ function formatDate(datetime) {
     return dateStr; // will return mm/dd/yyyy
 }
 
-var Comment = Backbone.Model.extend({});
+var Comment = Backbone.Model.extend({
+  url: function() {
+         return  "/api/posts/" + this.post_permalink + '/comments';
+  },
+  
+  toJSON: function() {
+    return { comment: _.clone( this.attributes ) }
+  },
+    
+});
 
 var Comments = Backbone.Collection.extend({
   model: Comment,
@@ -22,14 +31,53 @@ var Comments = Backbone.Collection.extend({
 
 var CommentView = Backbone.View.extend({
   render: function() {
-          
+    return this;       
   }
 });
 var CommentsView = Backbone.View.extend({
   render: function() {
-          
+    return this;      
   }
 });
+
+var AddCommentView = Backbone.View.extend({
+
+  template: _.template($('#add_comment_template').html()),
+
+  events: {
+    "click #submit" : "addComment"
+  },
+
+  initialize: function() {
+     _.bindAll(this, 'addCommentToComments');            
+  },
+
+  render: function() {
+    $(this.el).html(this.template());
+    return this;
+  },
+
+  addComment: function() {
+    console.log("adding...");             
+    var comment = new Comment();
+    comment.set('email', $(this.el).find('#email').val());
+    comment.set('name', $(this.el).find('#name').val());
+    comment.set('comment', $(this.el).find('#comment').val());
+    comment.post_permalink = this.post.get('permalink');
+    var self = this;
+    comment.save(null, {success: function(comment) {
+      self.addCommentToComments(comment);
+    }});
+  },
+
+  addCommentToComments: function(comment) {
+     console.log('rendu ici');
+     console.log(this.comments);
+     this.comments.add(comment);
+     console.log(this.comments);
+  }
+
+})
 
 
 var Post = Backbone.Model.extend({
@@ -115,9 +163,16 @@ var Blog = Backbone.Router.extend({
 
        var comments = new Comments();
        comments.post_permalink = model.get('permalink');
-       comments.fetch({success: function(model, response){
+       comments.fetch({success: function(comments, response){
          var commentsView = new CommentsView();
          $('#blog').append(commentsView.render().el);
+
+         var addCommentView = new AddCommentView();
+         addCommentView.post = p;
+         addCommentView.comments = comments;
+         
+         $('#blog').append(addCommentView.render().el);
+
        }});
 
      }});
