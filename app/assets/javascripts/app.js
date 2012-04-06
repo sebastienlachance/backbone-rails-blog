@@ -1,6 +1,6 @@
 
 _.templateSettings = {
-    interpolate: /\{\{\=(.+?)\}\}/g,
+  interpolate: /\{\{\=(.+?)\}\}/g,
     evaluate: /\{\{(.+?)\}\}/g
 };
 
@@ -69,6 +69,10 @@ var PostView = Backbone.View.extend({
 
 });
 
+var SinglePostView = PostView.extend({
+
+});
+
 var Posts = new PostList();
 
 var BlogView = Backbone.View.extend({
@@ -107,7 +111,7 @@ var Blog = Backbone.Router.extend({
      var p = new Post();
      p.set('permalink',permalink_received);
      p.fetch({success: function(model, response) {
-       var view = new PostView({model: model});
+       var view = new SinglePostView({model: model});
        $('#blog').html(view.render().el);
      }});
 
