@@ -11,10 +11,12 @@ function formatDate(datetime) {
 }
 
 var Comment = Backbone.Model.extend({});
+
 var Comments = Backbone.Collection.extend({
   model: Comment,
   url: function() {
-    return "/posts/" + this.get('permalink') + "/comments";     
+    console.log(this);
+    return "/api/posts/" + this.post_permalink + "/comments";     
   }
 });
 
@@ -69,9 +71,6 @@ var PostView = Backbone.View.extend({
 
 });
 
-var SinglePostView = PostView.extend({
-
-});
 
 var Posts = new PostList();
 
@@ -111,15 +110,18 @@ var Blog = Backbone.Router.extend({
      var p = new Post();
      p.set('permalink',permalink_received);
      p.fetch({success: function(model, response) {
-       var view = new SinglePostView({model: model});
+       var view = new PostView({model: model});
        $('#blog').html(view.render().el);
+
+       var comments = new Comments();
+       comments.post_permalink = model.get('permalink');
+       comments.fetch({success: function(model, response){
+         var commentsView = new CommentsView();
+         $('#blog').append(commentsView.render().el);
+       }});
+
      }});
 
-     var comments = new Comments([], {permalink: permalink_received});
-     comments.fetch({success: function(model, response){
-       var commentsView = new CommentsView();
-       $('#blog').append(commentsView.render().el);
-     }});
   }
 
 });
