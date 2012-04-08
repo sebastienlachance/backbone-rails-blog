@@ -30,14 +30,33 @@ var Comments = Backbone.Collection.extend({
 });
 
 var CommentView = Backbone.View.extend({
+  tagName: 'li',
+  template: _.template($('#comment_template').html()),
   render: function() {
-    return this;       
+    $(this.el).html(this.template(this.model.toJSON()));
+    return this;
   }
 });
+
 var CommentsView = Backbone.View.extend({
+
+  tagName: 'ul',
+  
+  initialize: function() {
+     _.bindAll(this, 'addComment');            
+     this.collection.on("add", this.addComment);
+  },
+
   render: function() {
+    this.collection.each(this.addComment);
     return this;      
+  },
+
+  addComment: function(comment) {
+      var view = new CommentView({model: comment});
+      $(this.el).append(view.render().el);
   }
+
 });
 
 var AddCommentView = Backbone.View.extend({
@@ -58,7 +77,6 @@ var AddCommentView = Backbone.View.extend({
   },
 
   addComment: function() {
-    console.log("adding...");             
     var comment = new Comment();
     comment.set('email', $(this.el).find('#email').val());
     comment.set('name', $(this.el).find('#name').val());
@@ -164,7 +182,9 @@ var Blog = Backbone.Router.extend({
        var comments = new Comments();
        comments.post_permalink = model.get('permalink');
        comments.fetch({success: function(comments, response){
-         var commentsView = new CommentsView();
+         var commentsView = new CommentsView({collection: comments});
+         console.log('comments');
+         console.log(commentsView.render().el);
          $('#blog').append(commentsView.render().el);
 
          var addCommentView = new AddCommentView();
